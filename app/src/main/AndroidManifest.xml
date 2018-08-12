@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="ac.ict.humanmotion.abracadabra">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+
+    <uses-permission-sdk-23 android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".WorkList.SelectWorkListFragment"
+            android:label="查询工单" />
+        <activity android:name=".WorkList.WorkListDetails" />
+        <activity android:name=".WorkList.NewWorkList" />
+        <activity
+            android:name=".WorkList.RealTimeDataFitting"
+            android:label="实时数据拟合" />
+        <activity
+            android:name=".WorkList.InputWorkList"
+            android:label="工单录入" />
+        <activity
+            android:name=".WorkList.OperationReplay"
+            android:label="操作重放" />
+        <activity android:name=".OCR.OCRActivity"></activity>
+    </application>
+
+</manifest>
