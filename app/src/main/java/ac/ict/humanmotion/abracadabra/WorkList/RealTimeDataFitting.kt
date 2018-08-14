@@ -5,12 +5,16 @@ import ac.ict.humanmotion.abracadabra.BaseActivity
 import ac.ict.humanmotion.abracadabra.Bean.OperationDetail
 import ac.ict.humanmotion.abracadabra.R
 import android.support.v7.widget.LinearLayoutManager
+import android.widget.Toast
 import kotlinx.android.synthetic.main.realtimedatafitting.*
 
 
 class RealTimeDataFitting : BaseActivity() {
     override val layoutId: Int
         get() = R.layout.realtimedatafitting
+
+    private fun showToast(message: String) = Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+
 
     override fun init() {
 
@@ -22,8 +26,9 @@ class RealTimeDataFitting : BaseActivity() {
 //                println(MainActivity.globalData.acc[0])
 
 
-                  // UPDATE CHAT use MainActivity.globalData
-                  // see uApplication-DataFragment for more information
+        // UPDATE CHAT use MainActivity.globalData
+        // see uApplication-DataFragment for more information
+        // Don't forget MainActivity's LifeCircle (especially OnResume/OnPause)
 //            }
 //        }
 
@@ -49,7 +54,7 @@ class RealTimeDataFitting : BaseActivity() {
             // ADD click handler in 'when' block
 
             when (v.id) {
-                R.id.accept_station -> println("accept_station SELECTED")
+                R.id.accept_station -> showToast("accept_station SELECTED, replace with your action")
                 // R.id.XXXXX -> println("XXXXX SELECTED")
             }
         }
