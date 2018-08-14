@@ -24,7 +24,11 @@ class SelectWorkListFragment : BaseActivity() {
         }
     }
 
-    private val images = intArrayOf(R.drawable.ic_launcher_foreground, R.drawable.ic_launcher_foreground, R.drawable.ic_launcher_foreground, R.drawable.ic_launcher_foreground, R.drawable.ic_launcher_foreground, R.drawable.ic_launcher_foreground, R.drawable.ic_launcher_foreground, R.drawable.ic_launcher_foreground)
+    private val images = intArrayOf(android.R.drawable.ic_dialog_alert,
+            android.R.drawable.ic_dialog_alert, android.R.drawable.ic_dialog_alert,
+            android.R.drawable.ic_dialog_alert, android.R.drawable.ic_dialog_alert,
+            android.R.drawable.ic_dialog_alert, android.R.drawable.ic_dialog_alert,
+            android.R.drawable.ic_dialog_alert)
     private val names = arrayOf("工单01号", "工单02号", "工单03号", "工单04号", "工单05号", "工单06号", "工单07号", "工单08号")
 
 

@@ -51,7 +51,7 @@ class MainActivity : BaseActivity(), ConnectionFragment.OnConnectListener {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(object : MyTemplateObserver<List<Operation>>() {
                     override fun onNext(t: List<Operation>) {
-                        Log.e("RETROFIT","OJBK")
+                        Log.e("RETROFIT", "OJBK")
                         println(t.toString())//自己解析
                     }
                 })
@@ -147,6 +147,8 @@ class MainActivity : BaseActivity(), ConnectionFragment.OnConnectListener {
         }
 
         const val FRAGMENTTAG = "ConnectionFragment"
+
+        var globalData = LpmsBData()
     }
 
     //LMPS==========================================>
@@ -171,6 +173,7 @@ class MainActivity : BaseActivity(), ConnectionFragment.OnConnectListener {
         override fun run() {
             synchronized(imuData) {
                 updateFragment(imuData, imuStatus)
+                globalData = imuData
             }
             updateFragmentsHandler.postDelayed(this, updateRate.toLong())
         }

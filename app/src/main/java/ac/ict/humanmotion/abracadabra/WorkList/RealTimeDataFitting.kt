@@ -1,13 +1,11 @@
 package ac.ict.humanmotion.abracadabra.WorkList
 
+import ac.ict.humanmotion.abracadabra.Adapter.ExampleAdapter
 import ac.ict.humanmotion.abracadabra.BaseActivity
 import ac.ict.humanmotion.abracadabra.Bean.OperationDetail
 import ac.ict.humanmotion.abracadabra.R
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.OrientationHelper
-import android.support.v7.widget.RecyclerView
-import android.view.View
-import java.util.*
+import kotlinx.android.synthetic.main.realtimedatafitting.*
 
 
 class RealTimeDataFitting : BaseActivity() {
@@ -15,16 +13,55 @@ class RealTimeDataFitting : BaseActivity() {
         get() = R.layout.realtimedatafitting
 
     override fun init() {
-        initData()
+
+//        thread {
+//            while (true) {
+//                // =========== VERY IMPORTANT ============
+//                // MainActivity.globalData is the data which you need to handle!!!
+//                // Use this to update chat
+//                println(MainActivity.globalData.acc[0])
+
+
+                  // UPDATE CHAT use MainActivity.globalData
+                  // see uApplication-DataFragment for more information
+//            }
+//        }
+
         initRecyclerView()
+
+        initAdapter()
+
+        initData()
+
+
     }
 
     private lateinit var mTraceList: MutableList<OperationDetail>
 
+    // 8-14 ADD
+    private lateinit var operationAdapter: ExampleAdapter
+
+    fun initAdapter() {
+        operationAdapter = ExampleAdapter(this)
+        operationAdapter.setItemOnclickListener { v, pos ->
+            val s = operationAdapter.getMyDataAt(pos)
+
+            // ADD click handler in 'when' block
+
+            when (v.id) {
+                R.id.accept_station -> println("accept_station SELECTED")
+                // R.id.XXXXX -> println("XXXXX SELECTED")
+            }
+        }
+
+        recycler_view.adapter = operationAdapter
+    }
+
 
     //这里是模拟一些假数据，加载数据
     private fun initData() {
-        mTraceList = ArrayList()
+        mTraceList = mutableListOf()
+
         val op = OperationDetail()
         op.type = 1
         op.order = 1
@@ -43,15 +80,13 @@ class RealTimeDataFitting : BaseActivity() {
         op3.detail = "关闭柜门"
         mTraceList.add(op3)
 
+        operationAdapter.setMyData(mTraceList)
+
     }
 
     //初始化显示物流追踪的RecyclerView
     private fun initRecyclerView() {
-        val traceRv = findViewById<View>(R.id.recycler_view) as RecyclerView
-        val layoutManager = LinearLayoutManager(this, OrientationHelper.VERTICAL, false)
-        //        OperationAdapter mAdapter = new OperationAdapter(this, mTraceList);
-        //        traceRv.setLayoutManager(layoutManager);
-        //        traceRv.setAdapter(mAdapter);
+        recycler_view.layoutManager = LinearLayoutManager(this)
     }
 
 }
