@@ -7,8 +7,6 @@ import ac.ict.humanmotion.abracadabra.Lpms.ImuStatus
 import ac.ict.humanmotion.abracadabra.Lpms.LpmsBData
 import ac.ict.humanmotion.abracadabra.Lpms.LpmsBThread
 import ac.ict.humanmotion.abracadabra.OCR.OCRActivity
-import ac.ict.humanmotion.abracadabra.WorkList.MineFragment
-import ac.ict.humanmotion.abracadabra.WorkList.WorkListOperationFragment
 import android.Manifest
 import android.annotation.TargetApi
 import android.bluetooth.BluetoothAdapter
@@ -52,7 +50,7 @@ class MainActivity : BaseActivity(), ConnectionFragment.OnConnectListener {
                 .subscribe(object : MyTemplateObserver<List<Operation>>() {
                     override fun onNext(t: List<Operation>) {
                         Log.e("RETROFIT", "OJBK")
-                        println(t.toString())//自己解析
+                        println(t.toString())
                     }
                 })
     }
@@ -106,10 +104,10 @@ class MainActivity : BaseActivity(), ConnectionFragment.OnConnectListener {
             override fun getItem(position: Int): Fragment {
                 var fragment: Fragment? = null
                 when (position) {
-                    0 -> fragment = WorkListOperationFragment()
-                    1 -> fragment = MineFragment()
-                    2 -> fragment = connectionFragment
-                    3 -> fragment = MineFragment()
+//                    0 -> fragment = WorkListOperationFragment()
+//                    1 -> fragment = MineFragment()
+//                    2 -> fragment = connectionFragment
+//                    3 -> fragment = MineFragment()
                 }
                 return fragment!!
             }

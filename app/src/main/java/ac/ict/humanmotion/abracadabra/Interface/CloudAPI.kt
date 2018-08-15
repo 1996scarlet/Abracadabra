@@ -86,4 +86,12 @@ interface CloudAPI {
     //delete the course
     @DELETE("worktable/{id}")
     fun deleteWorkTableById(@Path("id") courseId: Int): Observable<String>
+
+    // TODO: F1-> POST IMAGE TO SERVER
+
+    // TODO: F2-> POST IMAGE TO SERVER and GET CAMPARE RESULT
+
+    // TODO: F3-> GET OCR RESULT
+
+    // TODO: F4-> POST LMPSB2 DATA
 }

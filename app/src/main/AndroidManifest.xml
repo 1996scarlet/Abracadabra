@@ -18,27 +18,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity">
+        </activity>
+        <activity android:name=".FrontCameraActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".WorkList.SelectWorkListFragment"
-            android:label="查询工单" />
-        <activity android:name=".WorkList.WorkListDetails" />
-        <activity android:name=".WorkList.NewWorkList" />
-        <activity
-            android:name=".WorkList.RealTimeDataFitting"
-            android:label="实时数据拟合" />
-        <activity
-            android:name=".WorkList.InputWorkList"
-            android:label="工单录入" />
-        <activity
-            android:name=".WorkList.OperationReplay"
-            android:label="操作重放" />
-        <activity android:name=".OCR.OCRActivity"></activity>
+        <activity android:name=".FaceCampareActivity"></activity>
     </application>
 
 </manifest>
