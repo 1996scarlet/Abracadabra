@@ -1,6 +1,5 @@
 package ac.ict.humanmotion.abracadabra
 
-import ac.ict.humanmotion.abracadabra.OCR.OCRActivity
 import android.Manifest
 import android.annotation.TargetApi
 import android.content.Intent
@@ -28,20 +27,24 @@ class FrontCameraActivity : BaseActivity(), CameraBridgeViewBase.CvCameraViewLis
     private fun setUriToView() {
         thread {
             val tempMat = mRgba
-            showToast("OCR Data has been Uploaded to Server")
-            showToast("WAITING FOR RESULTS")
 
-            startActivity(Intent(this, FaceCampareActivity::class.java))
+            runOnUiThread {
+                showToast("OCR Data has been Uploaded to Server")
+                showToast("WAITING FOR RESULTS")
+            }
+
+            startActivity(Intent(this, MainActivity::class.java))
+            finish()
         }
     }
 
-    private fun clipPhoto(uri: Uri = OCRActivity.imageUri) {
+    private fun clipPhoto(uri: Uri = imageUri) {
         startActivityForResult(Intent("com.android.camera.action.CROP")
                 .setDataAndType(uri, "image/*")
                 .putExtra("crop", "true")
-                .putExtra(MediaStore.EXTRA_OUTPUT, OCRActivity.outUri)
+                .putExtra(MediaStore.EXTRA_OUTPUT, outUri)
                 .putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString())
-                .putExtra("return-data", false), OCRActivity.CROP_REQUEST_CODE)
+                .putExtra("return-data", false), CROP_REQUEST_CODE)
     }
 
     override fun onCameraFrame(inputFrame: CameraBridgeViewBase.CvCameraViewFrame?): Mat {
@@ -93,28 +96,19 @@ class FrontCameraActivity : BaseActivity(), CameraBridgeViewBase.CvCameraViewLis
 
         cameraFab.setOnClickListener {
 
-            if (nowIsOcrTime) {
-
-                initOCRCapture()
-
-            } else {
-                thread {
-                    val tempMat = mRgba
+            thread {
+                val tempMat = mRgba
+                runOnUiThread {
                     showToast("Size of ${tempMat.size().height * tempMat.size().width} Image Data has been Uploaded to Server")
                 }
-                cameraFab.text = "OCR WORK TICKET"
+
+                startActivityForResult(Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                        .putExtra(MediaStore.EXTRA_OUTPUT, imageUri), CAMERA_REQUEST_CODE)
             }
 
+            showToast("Processing")
+
         }
-    }
-
-    private fun initOCRCapture() {
-
-        cameraFab.setOnClickListener {
-            startActivityForResult(Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                    .putExtra(MediaStore.EXTRA_OUTPUT, imageUri), CAMERA_REQUEST_CODE)
-        }
-
     }
 
     companion object {
@@ -127,6 +121,7 @@ class FrontCameraActivity : BaseActivity(), CameraBridgeViewBase.CvCameraViewLis
         const val CROP_REQUEST_CODE = 10085
         const val RES_REQUEST_CODE = 10000
         const val rex = "/*-+)(<>'\\~!@$%&^ -:;[]{}「『…【】_《》oo′\"`\'“”‘’,."
+        val outUri = Uri.parse("file:///storage/emulated/0/tessdata/output.jpg")
 
         val imageUri = Uri.parse("file:///storage/emulated/0/tessdata/temp.jpg")
     }
@@ -140,7 +135,7 @@ class FrontCameraActivity : BaseActivity(), CameraBridgeViewBase.CvCameraViewLis
 
     @TargetApi(23)
     private fun getStorageAccessPermissions() {
-        requestPermissions(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE), RES_REQUEST_CODE)
+        requestPermissions(arrayOf(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE), RES_REQUEST_CODE)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {

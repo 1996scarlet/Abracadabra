@@ -1,6 +1,7 @@
 package ac.ict.humanmotion.abracadabra
 
 import ac.ict.humanmotion.abracadabra.Bean.Operation
+import ac.ict.humanmotion.abracadabra.Fragment.CompareFragment
 import ac.ict.humanmotion.abracadabra.HTTPAround.MyTemplateObserver
 import ac.ict.humanmotion.abracadabra.Lpms.ConnectionFragment
 import ac.ict.humanmotion.abracadabra.Lpms.ImuStatus
@@ -14,13 +15,10 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Environment
 import android.os.Handler
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentStatePagerAdapter
 import android.util.Log
 import android.widget.Toast
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 import kotlin.concurrent.thread
 
@@ -32,14 +30,31 @@ class MainActivity : BaseActivity(), ConnectionFragment.OnConnectListener {
 
     override fun init() {
         getStorageAccessPermissions()
-        initToolBar()
-        initViewPager()
-        initBottomNav()
 
         initLpms()
-
         initRxJava()
         initSimple()
+
+
+        compareFragment = CompareFragment()
+
+        connectionFragment = ConnectionFragment()
+
+        initCompareFragment()
+
+    }
+
+    private fun initCompareFragment() {
+
+        // LOAD FIRST
+        supportFragmentManager.beginTransaction().add(R.id.container, compareFragment).commit()
+
+        // (IF FACE OK) THEN (REMOVE FIRST)
+        supportFragmentManager.beginTransaction().remove(compareFragment).commit()
+
+        // LOAD SECOND FIRST
+        supportFragmentManager.beginTransaction().add(R.id.container, connectionFragment).commit()
+
     }
 
     // retrofit
@@ -49,7 +64,6 @@ class MainActivity : BaseActivity(), ConnectionFragment.OnConnectListener {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(object : MyTemplateObserver<List<Operation>>() {
                     override fun onNext(t: List<Operation>) {
-                        Log.e("RETROFIT", "OJBK")
                         println(t.toString())
                     }
                 })
@@ -88,44 +102,9 @@ class MainActivity : BaseActivity(), ConnectionFragment.OnConnectListener {
         }
     }
 
-    private fun initToolBar() {
-        main_title.setOnClickListener {
-            //            startActivity(Intent(this, MainActivity::class.java).putExtra("Swagger", 100))
-        }
-    }
-
     lateinit var connectionFragment: ConnectionFragment
+    lateinit var compareFragment: CompareFragment
 
-    private fun initViewPager() {
-
-        connectionFragment = ConnectionFragment()
-
-        main_view_pager.adapter = object : FragmentStatePagerAdapter(supportFragmentManager) {
-            override fun getItem(position: Int): Fragment {
-                var fragment: Fragment? = null
-                when (position) {
-//                    0 -> fragment = WorkListOperationFragment()
-//                    1 -> fragment = MineFragment()
-//                    2 -> fragment = connectionFragment
-//                    3 -> fragment = MineFragment()
-                }
-                return fragment!!
-            }
-
-            override fun getCount(): Int = 4
-        }
-
-        main_view_pager.offscreenPageLimit = 4
-    }
-
-    private fun initBottomNav() {
-        navigation.material()
-                .addItem(android.R.drawable.ic_menu_compass, "F0")
-                .addItem(android.R.drawable.ic_menu_report_image, "F1")
-                .addItem(android.R.drawable.ic_menu_search, "F2")
-                .addItem(android.R.drawable.ic_menu_call, "F3")
-                .build().setupWithViewPager(main_view_pager)
-    }
 
     override fun onBackPressed() {
         //back->home
@@ -146,7 +125,7 @@ class MainActivity : BaseActivity(), ConnectionFragment.OnConnectListener {
 
         const val FRAGMENTTAG = "ConnectionFragment"
 
-        var globalData = LpmsBData()
+//        var globalData = LpmsBData()
     }
 
     //LMPS==========================================>
@@ -171,7 +150,7 @@ class MainActivity : BaseActivity(), ConnectionFragment.OnConnectListener {
         override fun run() {
             synchronized(imuData) {
                 updateFragment(imuData, imuStatus)
-                globalData = imuData
+//                globalData = imuData
             }
             updateFragmentsHandler.postDelayed(this, updateRate.toLong())
         }

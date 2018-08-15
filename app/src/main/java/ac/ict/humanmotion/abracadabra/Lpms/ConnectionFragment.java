@@ -292,6 +292,6 @@ public class ConnectionFragment extends MyFragment implements OnClickListener {
 
     @Override
     public void updateView(LpmsBData d, ImuStatus s) {
-        Log.d("Connect", d.getAcc()[0] + " " + d.getLinAcc()[0]);
+//        Log.d("Connect", d.getAcc()[0] + " " + d.getLinAcc()[0]);
     }
 }
