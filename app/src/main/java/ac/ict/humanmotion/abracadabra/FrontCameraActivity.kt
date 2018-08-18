@@ -1,5 +1,6 @@
 package ac.ict.humanmotion.abracadabra
 
+import ac.ict.humanmotion.abracadabra.HTTPAround.MyStringObserver
 import android.Manifest
 import android.annotation.TargetApi
 import android.content.Intent
@@ -8,12 +9,19 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.provider.MediaStore
 import android.widget.Toast
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_front_camera.*
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import org.opencv.android.CameraBridgeViewBase
 import org.opencv.android.OpenCVLoader
 import org.opencv.core.CvType
 import org.opencv.core.Mat
+import java.io.File
 import kotlin.concurrent.thread
+
 
 class FrontCameraActivity : BaseActivity(), CameraBridgeViewBase.CvCameraViewListener2 {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -28,13 +36,28 @@ class FrontCameraActivity : BaseActivity(), CameraBridgeViewBase.CvCameraViewLis
         thread {
             val tempMat = mRgba
 
+            val file = File("/storage/emulated/0/tessdata/OUTPUT.jpg")
+            val requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file)
+            val body = MultipartBody.Part.createFormData("file", file.name, requestFile)
+
+            println("UPLOADING")
+
+            cloudAPI.uploadOCR(body).subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(object : MyStringObserver() {
+                        override fun onNext(t: String) {
+                            println("OCCR" + t)
+                            finish()
+                        }
+                    })
+
             runOnUiThread {
                 showToast("OCR Data has been Uploaded to Server")
                 showToast("WAITING FOR RESULTS")
             }
 
             startActivity(Intent(this, MainActivity::class.java))
-            finish()
+//            finish()
         }
     }
 
@@ -91,6 +114,8 @@ class FrontCameraActivity : BaseActivity(), CameraBridgeViewBase.CvCameraViewLis
 
     override fun init() {
         getStorageAccessPermissions()
+
+        initRxJava()
 
         cameraView.setCvCameraViewListener(this)
 

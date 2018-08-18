@@ -32,8 +32,8 @@ class MainActivity : BaseActivity(), ConnectionFragment.OnConnectListener {
         getStorageAccessPermissions()
 
         initLpms()
-        initRxJava()
-        initSimple()
+//        initRxJava()
+//        initSimple()
 
 
         compareFragment = CompareFragment()

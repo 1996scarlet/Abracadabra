@@ -4,7 +4,10 @@ import ac.ict.humanmotion.abracadabra.Bean.Operation
 import ac.ict.humanmotion.abracadabra.Bean.User
 import ac.ict.humanmotion.abracadabra.Bean.Worktable
 import io.reactivex.Observable
+import okhttp3.MultipartBody
 import retrofit2.http.*
+
+
 
 /**
  * Project AndroidCA.
@@ -86,6 +89,10 @@ interface CloudAPI {
     //delete the course
     @DELETE("worktable/{id}")
     fun deleteWorkTableById(@Path("id") courseId: Int): Observable<String>
+
+    @Multipart
+    @POST("ocr")
+    fun uploadOCR(@Part file: MultipartBody.Part): Observable<String>
 
     // TODO: F1-> POST IMAGE TO SERVER
 

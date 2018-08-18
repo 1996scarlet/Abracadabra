@@ -8,7 +8,7 @@ import android.support.v7.app.AppCompatActivity
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.scalars.ScalarsConverterFactory
 
 /**
  * Project AndroidCA.
@@ -20,7 +20,8 @@ abstract class BaseActivity : AppCompatActivity() {
     protected lateinit var cloudAPI: CloudAPI
     //    protected lateinit var rxPermissions: RxPermissions
     protected lateinit var sharedPreferences: SharedPreferences
-    protected val CLOUD_BASE_URL = "http://10.41.0.133:8990/v1/"
+    //    protected val CLOUD_BASE_URL = "http://10.41.0.133:8990/v1/"
+    protected val CLOUD_BASE_URL = "http://192.168.0.2:23456/"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,8 +36,8 @@ abstract class BaseActivity : AppCompatActivity() {
     protected fun initRxJava() {
         retrofit = Retrofit.Builder()
                 .baseUrl(CLOUD_BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-//                                .addConverterFactory(ScalarsConverterFactory.create())
+//                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(ScalarsConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .client(OkHttpClient())
                 .build()
